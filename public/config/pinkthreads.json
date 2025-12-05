@@ -1,0 +1,16 @@
+{
+  "tenant_id": "pinkthreads",
+  "brandName": "Pink Threads",
+  "tagline": "Bold & Beautiful",
+  "description": "Vibrant fashion for those who dare to stand out. Express yourself with our curated collection of statement pieces.",
+  "primaryColor": "#db2777",
+  "secondaryColor": "#fdf2f8",
+  "accentColor": "#be185d",
+  "logo": "/logos/pinkthreads.svg",
+  "banner": "/banners/pinkthreads-hero.jpg",
+  "categories": ["Women", "Accessories", "New In", "Best Sellers"],
+  "social": {
+    "instagram": "https://instagram.com/pinkthreads",
+    "tiktok": "https://tiktok.com/@pinkthreads"
+  }
+}

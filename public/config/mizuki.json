@@ -1,0 +1,16 @@
+{
+  "tenant_id": "mizuki",
+  "brandName": "Mizuki",
+  "tagline": "Minimalist Elegance",
+  "description": "Contemporary Japanese-inspired fashion for the modern minimalist. Clean lines, premium fabrics, timeless design.",
+  "primaryColor": "#1a1a1a",
+  "secondaryColor": "#fafafa",
+  "accentColor": "#2d2d2d",
+  "logo": "/logos/mizuki.svg",
+  "banner": "/banners/mizuki-hero.jpg",
+  "categories": ["Men", "Women", "New Arrivals", "Sale"],
+  "social": {
+    "instagram": "https://instagram.com/mizuki",
+    "twitter": "https://twitter.com/mizuki"
+  }
+}
