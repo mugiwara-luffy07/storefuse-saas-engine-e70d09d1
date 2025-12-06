@@ -1,16 +1,65 @@
 {
   "tenant_id": "pinkthreads",
   "brandName": "Pink Threads",
-  "tagline": "Bold & Beautiful",
-  "description": "Vibrant fashion for those who dare to stand out. Express yourself with our curated collection of statement pieces.",
-  "primaryColor": "#db2777",
-  "secondaryColor": "#fdf2f8",
-  "accentColor": "#be185d",
+  "tagline": "Where Dreams Are Stitched",
+  "description": "Vibrant custom tailoring with a modern flair. We craft beautiful garments that celebrate your unique style.",
+  "primaryColor": "#d4477a",
+  "secondaryColor": "#fff5f8",
+  "accentColor": "#b83d6a",
   "logo": "/logos/pinkthreads.svg",
   "banner": "/banners/pinkthreads-hero.jpg",
-  "categories": ["Women", "Accessories", "New In", "Best Sellers"],
   "social": {
     "instagram": "https://instagram.com/pinkthreads",
-    "tiktok": "https://tiktok.com/@pinkthreads"
-  }
+    "twitter": "https://twitter.com/pinkthreads"
+  },
+  "fabricOptions": [
+    { "id": "cotton", "name": "Soft Cotton", "colors": ["Pink", "White", "Coral", "Mint", "Yellow"] },
+    { "id": "silk", "name": "Mulberry Silk", "colors": ["Hot Pink", "Fuchsia", "Rose Gold", "Magenta", "Blush"] },
+    { "id": "velvet", "name": "Plush Velvet", "colors": ["Maroon", "Navy", "Emerald", "Purple", "Black"] },
+    { "id": "organza", "name": "Sheer Organza", "colors": ["Peach", "Lavender", "Mint", "Champagne", "Pink"] }
+  ],
+  "garmentOptions": [
+    { "id": "blouse", "name": "Blouse", "description": "Stylish tailored blouse" },
+    { "id": "churidhar", "name": "Churidhar", "description": "Trendy churidhar set" },
+    { "id": "top", "name": "Trendy Top", "description": "Fashion-forward casual top" },
+    { "id": "frock", "name": "Party Frock", "description": "Chic frock design" },
+    { "id": "lehenga", "name": "Lehenga Choli", "description": "Glamorous lehenga set" },
+    { "id": "anarkali", "name": "Anarkali Suit", "description": "Flowing anarkali design" }
+  ],
+  "designOptions": {
+    "neckDesigns": [
+      { "id": "round", "name": "Round Neck" },
+      { "id": "v-neck", "name": "V-Neck" },
+      { "id": "halter", "name": "Halter Neck" },
+      { "id": "off-shoulder", "name": "Off-Shoulder" },
+      { "id": "keyhole", "name": "Keyhole Neck" },
+      { "id": "peter-pan", "name": "Peter Pan Collar" }
+    ],
+    "embroideryStyles": [
+      { "id": "none", "name": "No Embroidery" },
+      { "id": "beadwork", "name": "Beadwork" },
+      { "id": "cutdana", "name": "Cutdana Work" },
+      { "id": "resham", "name": "Resham Embroidery" },
+      { "id": "kundan", "name": "Kundan Work" }
+    ],
+    "paintingStyles": [
+      { "id": "none", "name": "No Painting" },
+      { "id": "floral", "name": "Floral Prints" },
+      { "id": "geometric", "name": "Geometric Patterns" },
+      { "id": "watercolor", "name": "Watercolor Effect" },
+      { "id": "block", "name": "Block Print Style" }
+    ]
+  },
+  "measurementFields": [
+    { "id": "bust", "name": "Bust", "required": true },
+    { "id": "waist", "name": "Waist", "required": true },
+    { "id": "hip", "name": "Hip", "required": true },
+    { "id": "shoulder", "name": "Shoulder Width", "required": true },
+    { "id": "armLength", "name": "Arm Length", "required": true },
+    { "id": "armHole", "name": "Arm Hole", "required": true },
+    { "id": "frontLength", "name": "Front Length", "required": true },
+    { "id": "backLength", "name": "Back Length", "required": true },
+    { "id": "neckRound", "name": "Neck Round", "required": false },
+    { "id": "bottomLength", "name": "Bottom Length", "required": false }
+  ]
 }

@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Package,
-  ShoppingCart,
+  ClipboardList,
   LogOut,
   Store,
   Menu,
@@ -16,8 +15,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: 'dashboard' },
-  { icon: Package, label: 'Products', path: 'products' },
-  { icon: ShoppingCart, label: 'Orders', path: 'orders' },
+  { icon: ClipboardList, label: 'Orders', path: 'orders' },
 ];
 
 export default function AdminLayout() {
