@@ -11,17 +11,14 @@ import NotFound from "./pages/NotFound";
 // Tenant pages
 import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductView from "./pages/ProductView";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
+import CustomOrder from "./pages/CustomOrder";
 import OrderSuccess from "./pages/OrderSuccess";
+import About from "./pages/About";
 
 // Admin
 import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import DashboardHome from "./admin/DashboardHome";
-import AdminProducts from "./admin/AdminProducts";
 import AdminOrders from "./admin/AdminOrders";
 
 // Super Admin
@@ -53,18 +50,15 @@ const App = () => (
           <Route path="/:tenant/admin" element={<AdminLogin />} />
           <Route path="/:tenant/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<DashboardHome />} />
-            <Route path="products" element={<AdminProducts />} />
             <Route path="orders" element={<AdminOrders />} />
           </Route>
 
           {/* Tenant Customer Routes */}
           <Route path="/:tenant" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="products" element={<Products />} />
-            <Route path="products/:productId" element={<ProductView />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="checkout" element={<Checkout />} />
+            <Route path="order" element={<CustomOrder />} />
             <Route path="order-success" element={<OrderSuccess />} />
+            <Route path="about" element={<About />} />
           </Route>
 
           {/* 404 */}

@@ -8,12 +8,15 @@ interface TenantState {
   loadTenant: (tenantId: string) => Promise<void>;
 }
 
-export const useTenantStore = create<TenantState>((set) => ({
+export const useTenantStore = create<TenantState>((set, get) => ({
   config: null,
   isLoading: false,
   error: null,
 
   loadTenant: async (tenantId: string) => {
+    const currentConfig = get().config;
+    if (currentConfig?.tenant_id === tenantId) return;
+
     set({ isLoading: true, error: null });
     try {
       const config = await loadTenantConfig(tenantId);

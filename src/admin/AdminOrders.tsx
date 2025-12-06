@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Search, Eye, X, ChevronDown } from 'lucide-react';
+import { Search, Eye, X, ChevronDown, DollarSign } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTenantStore } from '@/store/tenantStore';
 
-interface Order {
+interface CustomOrder {
   id: string;
   customer: {
     name: string;
@@ -11,122 +12,132 @@ interface Order {
     phone: string;
     address: string;
   };
-  items: {
-    name: string;
-    size: string;
-    quantity: number;
-    price: number;
-    image: string;
-  }[];
-  total: number;
-  status: 'pending' | 'confirmed' | 'dispatched' | 'delivered';
+  orderData: {
+    fabric: { type: string; color: string };
+    garment: string;
+    design: { neckDesign: string; embroidery: string; painting: string };
+    measurements: Record<string, number>;
+    unit: string;
+  };
+  price: number | null;
+  status: 'pricing_pending' | 'price_sent' | 'processing' | 'packed' | 'dispatched' | 'delivered';
   createdAt: string;
 }
 
-const mockOrders: Order[] = [
+const mockOrders: CustomOrder[] = [
   {
-    id: 'ORD-K8X2M1',
+    id: 'ORD-T001',
     customer: {
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+1 234 567 8900',
-      address: '123 Main St, New York, NY 10001',
+      name: 'Priya Sharma',
+      email: 'priya@example.com',
+      phone: '+91 98765 43210',
+      address: '123 MG Road, Bangalore, Karnataka 560001',
     },
-    items: [
-      {
-        name: 'Oversized Cotton Tee',
-        size: 'M',
-        quantity: 2,
-        price: 68,
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100&h=120&fit=crop',
-      },
-    ],
-    total: 145.99,
-    status: 'pending',
+    orderData: {
+      fabric: { type: 'silk', color: 'Ivory' },
+      garment: 'blouse',
+      design: { neckDesign: 'boat', embroidery: 'zari', painting: 'none' },
+      measurements: { bust: 36, waist: 30, hip: 38, shoulder: 14, armLength: 22, armHole: 16, frontLength: 15, backLength: 16 },
+      unit: 'inches',
+    },
+    price: null,
+    status: 'pricing_pending',
     createdAt: '2024-01-15T10:30:00Z',
   },
   {
-    id: 'ORD-P3N7Q2',
+    id: 'ORD-T002',
     customer: {
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '+1 234 567 8901',
-      address: '456 Oak Ave, Los Angeles, CA 90001',
+      name: 'Anita Rao',
+      email: 'anita@example.com',
+      phone: '+91 98765 43211',
+      address: '456 Jubilee Hills, Hyderabad, Telangana 500033',
     },
-    items: [
-      {
-        name: 'Silk Camisole',
-        size: 'S',
-        quantity: 1,
-        price: 98,
-        image: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=100&h=120&fit=crop',
-      },
-      {
-        name: 'Wide Leg Jeans',
-        size: '26',
-        quantity: 1,
-        price: 148,
-        image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=100&h=120&fit=crop',
-      },
-    ],
-    total: 255.99,
-    status: 'confirmed',
+    orderData: {
+      fabric: { type: 'cotton', color: 'Navy' },
+      garment: 'churidhar',
+      design: { neckDesign: 'mandarin', embroidery: 'thread', painting: 'floral' },
+      measurements: { bust: 34, waist: 28, hip: 36, shoulder: 13.5, armLength: 21, armHole: 15, frontLength: 40, backLength: 41 },
+      unit: 'inches',
+    },
+    price: 2500,
+    status: 'price_sent',
     createdAt: '2024-01-14T15:45:00Z',
   },
   {
-    id: 'ORD-R9T4W5',
+    id: 'ORD-T003',
     customer: {
-      name: 'Mike Johnson',
-      email: 'mike@example.com',
-      phone: '+1 234 567 8902',
-      address: '789 Pine Rd, Chicago, IL 60601',
+      name: 'Meera Patel',
+      email: 'meera@example.com',
+      phone: '+91 98765 43212',
+      address: '789 CG Road, Ahmedabad, Gujarat 380006',
     },
-    items: [
-      {
-        name: 'Cashmere Knit Sweater',
-        size: 'L',
-        quantity: 1,
-        price: 298,
-        image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=100&h=120&fit=crop',
-      },
-    ],
-    total: 307.99,
-    status: 'dispatched',
+    orderData: {
+      fabric: { type: 'chiffon', color: 'Blush' },
+      garment: 'gown',
+      design: { neckDesign: 'sweetheart', embroidery: 'sequin', painting: 'none' },
+      measurements: { bust: 35, waist: 29, hip: 37, shoulder: 14, armLength: 22, armHole: 15.5, frontLength: 55, backLength: 56 },
+      unit: 'inches',
+    },
+    price: 4500,
+    status: 'processing',
     createdAt: '2024-01-13T09:20:00Z',
   },
   {
-    id: 'ORD-L2V8X3',
+    id: 'ORD-T004',
     customer: {
-      name: 'Sarah Wilson',
-      email: 'sarah@example.com',
-      phone: '+1 234 567 8903',
-      address: '321 Elm St, Miami, FL 33101',
+      name: 'Deepika Kumar',
+      email: 'deepika@example.com',
+      phone: '+91 98765 43213',
+      address: '321 Anna Nagar, Chennai, Tamil Nadu 600040',
     },
-    items: [
-      {
-        name: 'Structured Blazer',
-        size: 'M',
-        quantity: 1,
-        price: 248,
-        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=100&h=120&fit=crop',
-      },
-    ],
-    total: 257.99,
+    orderData: {
+      fabric: { type: 'linen', color: 'Natural' },
+      garment: 'top',
+      design: { neckDesign: 'v-neck', embroidery: 'none', painting: 'abstract' },
+      measurements: { bust: 33, waist: 27, hip: 35, shoulder: 13, armLength: 20, armHole: 14.5, frontLength: 24, backLength: 25 },
+      unit: 'inches',
+    },
+    price: 1800,
     status: 'delivered',
     createdAt: '2024-01-10T14:00:00Z',
   },
 ];
 
-const statusOptions = ['pending', 'confirmed', 'dispatched', 'delivered'] as const;
+const statusOptions = ['pricing_pending', 'price_sent', 'processing', 'packed', 'dispatched', 'delivered'] as const;
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'pricing_pending':
+      return 'bg-yellow-100 text-yellow-700';
+    case 'price_sent':
+      return 'bg-blue-100 text-blue-700';
+    case 'processing':
+      return 'bg-purple-100 text-purple-700';
+    case 'packed':
+      return 'bg-indigo-100 text-indigo-700';
+    case 'dispatched':
+      return 'bg-orange-100 text-orange-700';
+    case 'delivered':
+      return 'bg-green-100 text-green-700';
+    default:
+      return 'bg-muted text-muted-foreground';
+  }
+};
+
+const formatStatus = (status: string) => {
+  return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+};
 
 export default function AdminOrders() {
   const { tenant } = useParams<{ tenant: string }>();
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const { config } = useTenantStore();
+  const [orders, setOrders] = useState<CustomOrder[]>(mockOrders);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<CustomOrder | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [priceInput, setPriceInput] = useState('');
 
-  if (!tenant) return null;
+  if (!tenant || !config) return null;
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
@@ -136,7 +147,7 @@ export default function AdminOrders() {
     return matchesSearch && matchesStatus;
   });
 
-  const updateStatus = (orderId: string, newStatus: Order['status']) => {
+  const updateStatus = (orderId: string, newStatus: CustomOrder['status']) => {
     setOrders(
       orders.map((order) =>
         order.id === orderId ? { ...order, status: newStatus } : order
@@ -145,29 +156,40 @@ export default function AdminOrders() {
     if (selectedOrder?.id === orderId) {
       setSelectedOrder({ ...selectedOrder, status: newStatus });
     }
-    toast.success(`Order status updated to ${newStatus}`);
+    toast.success(`Order status updated to ${formatStatus(newStatus)}`);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'confirmed':
-        return 'bg-blue-100 text-blue-700';
-      case 'dispatched':
-        return 'bg-purple-100 text-purple-700';
-      case 'delivered':
-        return 'bg-green-100 text-green-700';
-      default:
-        return 'bg-muted text-muted-foreground';
+  const updatePrice = (orderId: string) => {
+    const price = parseFloat(priceInput);
+    if (isNaN(price) || price <= 0) {
+      toast.error('Please enter a valid price');
+      return;
     }
+    setOrders(
+      orders.map((order) =>
+        order.id === orderId ? { ...order, price, status: 'price_sent' } : order
+      )
+    );
+    if (selectedOrder?.id === orderId) {
+      setSelectedOrder({ ...selectedOrder, price, status: 'price_sent' });
+    }
+    setPriceInput('');
+    toast.success('Price updated and sent to customer');
+  };
+
+  const getGarmentName = (garmentId: string) => {
+    return config.garmentOptions.find(g => g.id === garmentId)?.name || garmentId;
+  };
+
+  const getFabricName = (fabricId: string) => {
+    return config.fabricOptions.find(f => f.id === fabricId)?.name || fabricId;
   };
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-semibold mb-1">Orders</h1>
-        <p className="text-muted-foreground">Manage and track customer orders</p>
+        <h1 className="text-2xl font-semibold mb-1">Custom Orders</h1>
+        <p className="text-muted-foreground">Manage and track tailoring orders</p>
       </div>
 
       {/* Filters */}
@@ -185,12 +207,12 @@ export default function AdminOrders() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="input-styled w-full sm:w-40"
+          className="input-styled w-full sm:w-48"
         >
           <option value="all">All Status</option>
           {statusOptions.map((status) => (
             <option key={status} value={status}>
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {formatStatus(status)}
             </option>
           ))}
         </select>
@@ -204,7 +226,8 @@ export default function AdminOrders() {
               <tr className="table-header">
                 <th className="text-left p-4">Order ID</th>
                 <th className="text-left p-4 hidden md:table-cell">Customer</th>
-                <th className="text-left p-4">Total</th>
+                <th className="text-left p-4">Garment</th>
+                <th className="text-left p-4">Price</th>
                 <th className="text-left p-4">Status</th>
                 <th className="text-right p-4">Actions</th>
               </tr>
@@ -220,17 +243,27 @@ export default function AdminOrders() {
                   </td>
                   <td className="p-4 hidden md:table-cell">
                     <p className="text-sm">{order.customer.name}</p>
-                    <p className="text-xs text-muted-foreground">{order.customer.email}</p>
+                    <p className="text-xs text-muted-foreground">{order.customer.phone}</p>
                   </td>
                   <td className="p-4">
-                    <span className="font-medium">${order.total.toFixed(2)}</span>
+                    <p className="text-sm">{getGarmentName(order.orderData.garment)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {getFabricName(order.orderData.fabric.type)} - {order.orderData.fabric.color}
+                    </p>
+                  </td>
+                  <td className="p-4">
+                    {order.price ? (
+                      <span className="font-medium">₹{order.price.toLocaleString()}</span>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">Pending</span>
+                    )}
                   </td>
                   <td className="p-4">
                     <div className="relative inline-block">
                       <select
                         value={order.status}
                         onChange={(e) =>
-                          updateStatus(order.id, e.target.value as Order['status'])
+                          updateStatus(order.id, e.target.value as CustomOrder['status'])
                         }
                         className={`appearance-none text-xs px-3 py-1.5 pr-7 rounded-full cursor-pointer font-medium ${getStatusColor(
                           order.status
@@ -238,7 +271,7 @@ export default function AdminOrders() {
                       >
                         {statusOptions.map((status) => (
                           <option key={status} value={status}>
-                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                            {formatStatus(status)}
                           </option>
                         ))}
                       </select>
@@ -263,7 +296,7 @@ export default function AdminOrders() {
       {/* Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/50">
-          <div className="bg-card rounded-xl border border-border w-full max-w-lg max-h-[90vh] overflow-y-auto animate-scale-in">
+          <div className="bg-card rounded-xl border border-border w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
               <h2 className="font-semibold">Order {selectedOrder.id}</h2>
               <button
@@ -274,77 +307,98 @@ export default function AdminOrders() {
               </button>
             </div>
             <div className="p-6 space-y-6">
-              {/* Status */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Status</span>
-                <span
-                  className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${getStatusColor(
-                    selectedOrder.status
-                  )}`}
-                >
-                  {selectedOrder.status}
-                </span>
+              {/* Status & Price */}
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Status:</span>
+                  <span
+                    className={`text-xs px-3 py-1 rounded-full font-medium ${getStatusColor(
+                      selectedOrder.status
+                    )}`}
+                  >
+                    {formatStatus(selectedOrder.status)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Price:</span>
+                  {selectedOrder.price ? (
+                    <span className="font-semibold">₹{selectedOrder.price.toLocaleString()}</span>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={priceInput}
+                        onChange={(e) => setPriceInput(e.target.value)}
+                        placeholder="Enter price"
+                        className="input-styled w-32 text-sm"
+                      />
+                      <button
+                        onClick={() => updatePrice(selectedOrder.id)}
+                        className="btn-tenant text-sm py-1.5"
+                      >
+                        <DollarSign className="w-4 h-4 mr-1" />
+                        Set Price
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Customer */}
               <div>
                 <h3 className="font-medium mb-2">Customer Details</h3>
                 <div className="bg-muted/50 rounded-lg p-4 space-y-2 text-sm">
-                  <p>
-                    <span className="text-muted-foreground">Name:</span>{' '}
-                    {selectedOrder.customer.name}
-                  </p>
-                  <p>
-                    <span className="text-muted-foreground">Email:</span>{' '}
-                    {selectedOrder.customer.email}
-                  </p>
-                  <p>
-                    <span className="text-muted-foreground">Phone:</span>{' '}
-                    {selectedOrder.customer.phone}
-                  </p>
-                  <p>
-                    <span className="text-muted-foreground">Address:</span>{' '}
-                    {selectedOrder.customer.address}
-                  </p>
+                  <p><span className="text-muted-foreground">Name:</span> {selectedOrder.customer.name}</p>
+                  <p><span className="text-muted-foreground">Email:</span> {selectedOrder.customer.email}</p>
+                  <p><span className="text-muted-foreground">Phone:</span> {selectedOrder.customer.phone}</p>
+                  <p><span className="text-muted-foreground">Address:</span> {selectedOrder.customer.address}</p>
                 </div>
               </div>
 
-              {/* Items */}
+              {/* Order Details */}
               <div>
-                <h3 className="font-medium mb-2">Order Items</h3>
-                <div className="space-y-3">
-                  {selectedOrder.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 bg-muted/50 rounded-lg p-3"
-                    >
-                      <div className="w-12 h-14 rounded-md overflow-hidden bg-muted">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Size: {item.size} × {item.quantity}
-                        </p>
-                      </div>
-                      <span className="font-medium">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </span>
+                <h3 className="font-medium mb-2">Order Details</h3>
+                <div className="bg-muted/50 rounded-lg p-4 space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Fabric:</span>
+                    <span>{getFabricName(selectedOrder.orderData.fabric.type)} - {selectedOrder.orderData.fabric.color}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Garment:</span>
+                    <span>{getGarmentName(selectedOrder.orderData.garment)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Neck Design:</span>
+                    <span className="capitalize">{selectedOrder.orderData.design.neckDesign.replace('-', ' ')}</span>
+                  </div>
+                  {selectedOrder.orderData.design.embroidery !== 'none' && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Embroidery:</span>
+                      <span className="capitalize">{selectedOrder.orderData.design.embroidery}</span>
                     </div>
-                  ))}
+                  )}
+                  {selectedOrder.orderData.design.painting !== 'none' && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Painting:</span>
+                      <span className="capitalize">{selectedOrder.orderData.design.painting}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Total */}
-              <div className="flex items-center justify-between border-t border-border pt-4">
-                <span className="font-semibold">Total</span>
-                <span className="font-semibold text-lg">
-                  ${selectedOrder.total.toFixed(2)}
-                </span>
+              {/* Measurements */}
+              <div>
+                <h3 className="font-medium mb-2">Measurements ({selectedOrder.orderData.unit})</h3>
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    {Object.entries(selectedOrder.orderData.measurements).map(([key, value]) => (
+                      <div key={key} className="flex justify-between">
+                        <span className="text-muted-foreground capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
+                        <span>{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

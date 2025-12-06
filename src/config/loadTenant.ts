@@ -1,5 +1,34 @@
 import axios from 'axios';
 
+export interface FabricOption {
+  id: string;
+  name: string;
+  colors: string[];
+}
+
+export interface GarmentOption {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface DesignOption {
+  id: string;
+  name: string;
+}
+
+export interface DesignOptions {
+  neckDesigns: DesignOption[];
+  embroideryStyles: DesignOption[];
+  paintingStyles: DesignOption[];
+}
+
+export interface MeasurementField {
+  id: string;
+  name: string;
+  required: boolean;
+}
+
 export interface TenantConfig {
   tenant_id: string;
   brandName: string;
@@ -10,22 +39,35 @@ export interface TenantConfig {
   accentColor: string;
   logo: string;
   banner: string;
-  categories: string[];
-  social: Record<string, string>;
+  social: {
+    instagram?: string;
+    twitter?: string;
+  };
+  fabricOptions: FabricOption[];
+  garmentOptions: GarmentOption[];
+  designOptions: DesignOptions;
+  measurementFields: MeasurementField[];
 }
 
 const defaultConfig: TenantConfig = {
   tenant_id: 'default',
   brandName: 'StoreFuse',
-  tagline: 'Multi-tenant E-commerce',
+  tagline: 'Custom Tailoring Made Easy',
   description: 'Build your brand with StoreFuse',
   primaryColor: '#1a1a1a',
   secondaryColor: '#fafafa',
   accentColor: '#2d2d2d',
   logo: '/logos/storefuse.svg',
   banner: '/banners/default-hero.jpg',
-  categories: ['All Products'],
   social: {},
+  fabricOptions: [],
+  garmentOptions: [],
+  designOptions: {
+    neckDesigns: [],
+    embroideryStyles: [],
+    paintingStyles: [],
+  },
+  measurementFields: [],
 };
 
 export async function loadTenantConfig(tenantId: string): Promise<TenantConfig> {
@@ -39,10 +81,8 @@ export async function loadTenantConfig(tenantId: string): Promise<TenantConfig> 
 }
 
 export function hexToHSL(hex: string): string {
-  // Remove the hash if present
   hex = hex.replace(/^#/, '');
   
-  // Parse the hex values
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
   const b = parseInt(hex.substring(4, 6), 16) / 255;
