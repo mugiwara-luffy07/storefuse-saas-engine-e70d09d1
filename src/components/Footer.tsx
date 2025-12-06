@@ -22,18 +22,31 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider opacity-80">Shop</h4>
+            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider opacity-80">Services</h4>
             <ul className="space-y-3">
-              {config.categories.map((category) => (
-                <li key={category}>
-                  <Link
-                    to={`/${tenant}/products?category=${category.toLowerCase().replace(' ', '-')}`}
-                    className="text-sm opacity-80 hover:opacity-100 transition-opacity"
-                  >
-                    {category}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  to={`/${tenant}/order`}
+                  className="text-sm opacity-80 hover:opacity-100 transition-opacity"
+                >
+                  Custom Order
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="text-sm opacity-80 hover:opacity-100 transition-opacity">
+                  Fabric Collection
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm opacity-80 hover:opacity-100 transition-opacity">
+                  Design Gallery
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm opacity-80 hover:opacity-100 transition-opacity">
+                  Measurement Guide
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -48,12 +61,12 @@ export function Footer() {
               </li>
               <li>
                 <a href="#" className="text-sm opacity-80 hover:opacity-100 transition-opacity">
-                  Shipping & Returns
+                  How It Works
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm opacity-80 hover:opacity-100 transition-opacity">
-                  Size Guide
+                  Pricing Info
                 </a>
               </li>
               <li>
