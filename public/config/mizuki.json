@@ -1,16 +1,65 @@
 {
   "tenant_id": "mizuki",
   "brandName": "Mizuki",
-  "tagline": "Minimalist Elegance",
-  "description": "Contemporary Japanese-inspired fashion for the modern minimalist. Clean lines, premium fabrics, timeless design.",
+  "tagline": "Bespoke Tailoring Excellence",
+  "description": "Contemporary Japanese-inspired custom tailoring for the modern minimalist. Handcrafted garments with precision and elegance.",
   "primaryColor": "#1a1a1a",
   "secondaryColor": "#fafafa",
   "accentColor": "#2d2d2d",
   "logo": "/logos/mizuki.svg",
   "banner": "/banners/mizuki-hero.jpg",
-  "categories": ["Men", "Women", "New Arrivals", "Sale"],
   "social": {
     "instagram": "https://instagram.com/mizuki",
     "twitter": "https://twitter.com/mizuki"
-  }
+  },
+  "fabricOptions": [
+    { "id": "cotton", "name": "Premium Cotton", "colors": ["White", "Black", "Navy", "Cream", "Sky Blue"] },
+    { "id": "silk", "name": "Pure Silk", "colors": ["Ivory", "Champagne", "Rose", "Black", "Burgundy"] },
+    { "id": "linen", "name": "Belgian Linen", "colors": ["Natural", "White", "Sage", "Taupe", "Charcoal"] },
+    { "id": "chiffon", "name": "Georgette Chiffon", "colors": ["Blush", "Mint", "Lavender", "Peach", "White"] }
+  ],
+  "garmentOptions": [
+    { "id": "blouse", "name": "Blouse", "description": "Elegant tailored blouse" },
+    { "id": "churidhar", "name": "Churidhar", "description": "Traditional churidhar set" },
+    { "id": "top", "name": "Designer Top", "description": "Contemporary casual top" },
+    { "id": "frock", "name": "Frock", "description": "Classic frock design" },
+    { "id": "salwar", "name": "Salwar Kameez", "description": "Traditional salwar set" },
+    { "id": "gown", "name": "Evening Gown", "description": "Elegant evening wear" }
+  ],
+  "designOptions": {
+    "neckDesigns": [
+      { "id": "round", "name": "Round Neck" },
+      { "id": "v-neck", "name": "V-Neck" },
+      { "id": "boat", "name": "Boat Neck" },
+      { "id": "collar", "name": "Collar Neck" },
+      { "id": "mandarin", "name": "Mandarin Collar" },
+      { "id": "sweetheart", "name": "Sweetheart Neck" }
+    ],
+    "embroideryStyles": [
+      { "id": "none", "name": "No Embroidery" },
+      { "id": "thread", "name": "Thread Work" },
+      { "id": "zari", "name": "Zari Work" },
+      { "id": "sequin", "name": "Sequin Work" },
+      { "id": "mirror", "name": "Mirror Work" }
+    ],
+    "paintingStyles": [
+      { "id": "none", "name": "No Painting" },
+      { "id": "floral", "name": "Floral Motifs" },
+      { "id": "abstract", "name": "Abstract Art" },
+      { "id": "traditional", "name": "Traditional Patterns" },
+      { "id": "contemporary", "name": "Contemporary Design" }
+    ]
+  },
+  "measurementFields": [
+    { "id": "bust", "name": "Bust", "required": true },
+    { "id": "waist", "name": "Waist", "required": true },
+    { "id": "hip", "name": "Hip", "required": true },
+    { "id": "shoulder", "name": "Shoulder Width", "required": true },
+    { "id": "armLength", "name": "Arm Length", "required": true },
+    { "id": "armHole", "name": "Arm Hole", "required": true },
+    { "id": "frontLength", "name": "Front Length", "required": true },
+    { "id": "backLength", "name": "Back Length", "required": true },
+    { "id": "neckRound", "name": "Neck Round", "required": false },
+    { "id": "bottomLength", "name": "Bottom Length", "required": false }
+  ]
 }
