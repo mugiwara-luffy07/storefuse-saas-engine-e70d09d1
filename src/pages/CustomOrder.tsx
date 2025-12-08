@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Check, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Loader2, CheckCircle, Mail } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
 import { useOrderStore, OrderData } from '@/store/orderStore';
 import { toast } from 'sonner';
 import { tenantApi } from '@/api/axiosInstance';
+import { sendConfirmationEmail } from '@/lib/api/email';
 
 // Step components
 import { FabricStep } from '@/components/order/FabricStep';
@@ -27,6 +28,7 @@ export default function CustomOrder() {
   const { config } = useTenantStore();
   const { currentOrder, currentStep, setStep, nextStep, prevStep, resetOrder } = useOrderStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitState, setSubmitState] = useState<'idle' | 'submitting' | 'sending-email' | 'success'>('idle');
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     email: '',
@@ -61,17 +63,52 @@ export default function CustomOrder() {
     }
 
     setIsSubmitting(true);
+    setSubmitState('submitting');
+    
     try {
-      await tenantApi.createOrder(tenant, {
+      // Create the order
+      const response = await tenantApi.createOrder(tenant, {
         customer: customerInfo,
         orderData: currentOrder as OrderData,
       });
       
-      resetOrder();
-      navigate(`/${tenant}/order-success`);
-      toast.success('Order submitted successfully!');
+      const orderId = response.data?.id || `ORD-${Date.now()}`;
+      
+      // Send confirmation email
+      setSubmitState('sending-email');
+      try {
+        await sendConfirmationEmail(tenant, {
+          orderId,
+          customerEmail: customerInfo.email,
+          adminEmail: `admin@${tenant}.com`, // Default admin email
+          orderDetails: {
+            fabric: currentOrder.fabric!,
+            garment: currentOrder.garment!,
+            design: currentOrder.design!,
+            measurements: currentOrder.measurements!,
+            unit: currentOrder.unit || 'inches',
+            customerInfo,
+          },
+        });
+        toast.success('Order placed! Confirmation email sent');
+      } catch (emailError) {
+        // Order was placed, but email failed - still show success
+        console.error('Failed to send confirmation email:', emailError);
+        toast.success('Order placed successfully!');
+        toast.error('Could not send confirmation email');
+      }
+      
+      setSubmitState('success');
+      
+      // Wait a moment to show success state, then navigate
+      setTimeout(() => {
+        resetOrder();
+        navigate(`/${tenant}/order-success`);
+      }, 1500);
+      
     } catch (error) {
       toast.error('Failed to submit order. Please try again.');
+      setSubmitState('idle');
     } finally {
       setIsSubmitting(false);
     }
@@ -173,13 +210,23 @@ export default function CustomOrder() {
             ) : (
               <button
                 onClick={handleSubmit}
-                disabled={!canProceed() || isSubmitting}
-                className="btn-tenant disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!canProceed() || isSubmitting || submitState === 'success'}
+                className="btn-tenant disabled:opacity-50 disabled:cursor-not-allowed min-w-[180px]"
               >
-                {isSubmitting ? (
+                {submitState === 'submitting' ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Submitting...
+                    Placing Order...
+                  </>
+                ) : submitState === 'sending-email' ? (
+                  <>
+                    <Mail className="w-4 h-4 mr-2 animate-pulse" />
+                    Sending Confirmation...
+                  </>
+                ) : submitState === 'success' ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Order Placed!
                   </>
                 ) : (
                   'Submit Order'
