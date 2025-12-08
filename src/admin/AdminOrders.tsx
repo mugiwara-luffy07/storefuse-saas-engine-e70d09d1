@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Search, Eye, X, ChevronDown, DollarSign } from 'lucide-react';
+import { Search, Eye, X, ChevronDown, DollarSign, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTenantStore } from '@/store/tenantStore';
+import { sendAcceptanceEmail } from '@/lib/api/email';
 
 interface CustomOrder {
   id: string;
@@ -136,6 +137,7 @@ export default function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState<CustomOrder | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [priceInput, setPriceInput] = useState('');
+  const [isSettingPrice, setIsSettingPrice] = useState(false);
 
   if (!tenant || !config) return null;
 
@@ -159,22 +161,48 @@ export default function AdminOrders() {
     toast.success(`Order status updated to ${formatStatus(newStatus)}`);
   };
 
-  const updatePrice = (orderId: string) => {
+  const updatePrice = async (orderId: string) => {
     const price = parseFloat(priceInput);
     if (isNaN(price) || price <= 0) {
       toast.error('Please enter a valid price');
       return;
     }
-    setOrders(
-      orders.map((order) =>
-        order.id === orderId ? { ...order, price, status: 'price_sent' } : order
-      )
-    );
-    if (selectedOrder?.id === orderId) {
-      setSelectedOrder({ ...selectedOrder, price, status: 'price_sent' });
+    
+    const order = orders.find(o => o.id === orderId);
+    if (!order) return;
+    
+    setIsSettingPrice(true);
+    
+    try {
+      // Update local state first
+      setOrders(
+        orders.map((o) =>
+          o.id === orderId ? { ...o, price, status: 'price_sent' } : o
+        )
+      );
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder({ ...selectedOrder, price, status: 'price_sent' });
+      }
+      
+      // Send acceptance email to customer
+      const summary = `${getGarmentName(order.orderData.garment)} in ${getFabricName(order.orderData.fabric.type)} (${order.orderData.fabric.color}) with ${order.orderData.design.neckDesign} neck design`;
+      
+      await sendAcceptanceEmail(tenant, {
+        orderId,
+        customerEmail: order.customer.email,
+        amount: price,
+        summary,
+      });
+      
+      toast.success('Order accepted! Email notification sent');
+    } catch (error) {
+      console.error('Failed to send acceptance email:', error);
+      toast.success('Price updated successfully');
+      toast.error('Could not send email notification');
+    } finally {
+      setIsSettingPrice(false);
+      setPriceInput('');
     }
-    setPriceInput('');
-    toast.success('Price updated and sent to customer');
   };
 
   const getGarmentName = (garmentId: string) => {
@@ -334,10 +362,20 @@ export default function AdminOrders() {
                       />
                       <button
                         onClick={() => updatePrice(selectedOrder.id)}
-                        className="btn-tenant text-sm py-1.5"
+                        disabled={isSettingPrice}
+                        className="btn-tenant text-sm py-1.5 disabled:opacity-50 min-w-[120px]"
                       >
-                        <DollarSign className="w-4 h-4 mr-1" />
-                        Set Price
+                        {isSettingPrice ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <DollarSign className="w-4 h-4 mr-1" />
+                            Set Price
+                          </>
+                        )}
                       </button>
                     </div>
                   )}
