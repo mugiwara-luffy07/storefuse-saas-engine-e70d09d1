@@ -12,6 +12,10 @@
     "instagram": "https://instagram.com/pinkthreads",
     "twitter": "https://twitter.com/pinkthreads"
   },
+  "payment": {
+    "upiId": "pinkthreads@upi",
+    "upiQrImage": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=pinkthreads@upi"
+  },
   "fabricOptions": [
     { "id": "cotton", "name": "Soft Cotton", "colors": ["Pink", "White", "Coral", "Mint", "Yellow"] },
     { "id": "silk", "name": "Mulberry Silk", "colors": ["Hot Pink", "Fuchsia", "Rose Gold", "Magenta", "Blush"] },

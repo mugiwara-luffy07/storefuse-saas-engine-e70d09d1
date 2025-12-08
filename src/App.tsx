@@ -13,6 +13,7 @@ import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
 import CustomOrder from "./pages/CustomOrder";
 import OrderSuccess from "./pages/OrderSuccess";
+import OrderTracking from "./pages/OrderTracking";
 import About from "./pages/About";
 
 // Admin
@@ -58,6 +59,7 @@ const App = () => (
             <Route index element={<Home />} />
             <Route path="order" element={<CustomOrder />} />
             <Route path="order-success" element={<OrderSuccess />} />
+            <Route path="orders/:orderId" element={<OrderTracking />} />
             <Route path="about" element={<About />} />
           </Route>
 

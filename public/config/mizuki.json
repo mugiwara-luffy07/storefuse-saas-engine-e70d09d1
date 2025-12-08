@@ -12,6 +12,10 @@
     "instagram": "https://instagram.com/mizuki",
     "twitter": "https://twitter.com/mizuki"
   },
+  "payment": {
+    "upiId": "mizuki@upi",
+    "upiQrImage": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=mizuki@upi"
+  },
   "fabricOptions": [
     { "id": "cotton", "name": "Premium Cotton", "colors": ["White", "Black", "Navy", "Cream", "Sky Blue"] },
     { "id": "silk", "name": "Pure Silk", "colors": ["Ivory", "Champagne", "Rose", "Black", "Burgundy"] },

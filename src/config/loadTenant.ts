@@ -29,6 +29,11 @@ export interface MeasurementField {
   required: boolean;
 }
 
+export interface PaymentConfig {
+  upiId: string;
+  upiQrImage: string;
+}
+
 export interface TenantConfig {
   tenant_id: string;
   brandName: string;
@@ -43,6 +48,7 @@ export interface TenantConfig {
     instagram?: string;
     twitter?: string;
   };
+  payment: PaymentConfig;
   fabricOptions: FabricOption[];
   garmentOptions: GarmentOption[];
   designOptions: DesignOptions;
@@ -60,6 +66,10 @@ const defaultConfig: TenantConfig = {
   logo: '/logos/storefuse.svg',
   banner: '/banners/default-hero.jpg',
   social: {},
+  payment: {
+    upiId: '',
+    upiQrImage: '',
+  },
   fabricOptions: [],
   garmentOptions: [],
   designOptions: {
