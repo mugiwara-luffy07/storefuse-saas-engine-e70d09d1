@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Search, Eye, X, ChevronDown, DollarSign, Loader2 } from 'lucide-react';
+import { Search, Eye, X, ChevronDown, DollarSign, Loader2, CheckCircle, Clock, AlertCircle, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTenantStore } from '@/store/tenantStore';
 import { sendAcceptanceEmail } from '@/lib/api/email';
+
+type PaymentStatus = 'pending' | 'customer_claimed' | 'admin_confirmed';
 
 interface CustomOrder {
   id: string;
@@ -22,6 +24,7 @@ interface CustomOrder {
   };
   price: number | null;
   status: 'pricing_pending' | 'price_sent' | 'processing' | 'packed' | 'dispatched' | 'delivered';
+  paymentStatus: PaymentStatus;
   createdAt: string;
 }
 
@@ -43,6 +46,7 @@ const mockOrders: CustomOrder[] = [
     },
     price: null,
     status: 'pricing_pending',
+    paymentStatus: 'pending',
     createdAt: '2024-01-15T10:30:00Z',
   },
   {
@@ -62,6 +66,7 @@ const mockOrders: CustomOrder[] = [
     },
     price: 2500,
     status: 'price_sent',
+    paymentStatus: 'customer_claimed',
     createdAt: '2024-01-14T15:45:00Z',
   },
   {
@@ -81,6 +86,7 @@ const mockOrders: CustomOrder[] = [
     },
     price: 4500,
     status: 'processing',
+    paymentStatus: 'admin_confirmed',
     createdAt: '2024-01-13T09:20:00Z',
   },
   {
@@ -100,9 +106,29 @@ const mockOrders: CustomOrder[] = [
     },
     price: 1800,
     status: 'delivered',
+    paymentStatus: 'admin_confirmed',
     createdAt: '2024-01-10T14:00:00Z',
   },
 ];
+
+const paymentStatusSteps = [
+  { key: 'pending', label: 'Pending', icon: Clock },
+  { key: 'customer_claimed', label: 'Customer Claimed', icon: AlertCircle },
+  { key: 'admin_confirmed', label: 'Confirmed', icon: CheckCircle },
+];
+
+const getPaymentStatusColor = (status: PaymentStatus) => {
+  switch (status) {
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-700';
+    case 'customer_claimed':
+      return 'bg-blue-100 text-blue-700';
+    case 'admin_confirmed':
+      return 'bg-green-100 text-green-700';
+    default:
+      return 'bg-muted text-muted-foreground';
+  }
+};
 
 const statusOptions = ['pricing_pending', 'price_sent', 'processing', 'packed', 'dispatched', 'delivered'] as const;
 
@@ -138,6 +164,7 @@ export default function AdminOrders() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [priceInput, setPriceInput] = useState('');
   const [isSettingPrice, setIsSettingPrice] = useState(false);
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false);
 
   if (!tenant || !config) return null;
 
@@ -438,6 +465,95 @@ export default function AdminOrders() {
                   </div>
                 </div>
               </div>
+
+              {/* Payment Status Timeline */}
+              {selectedOrder.price && (
+                <div>
+                  <h3 className="font-medium mb-4">Payment Status</h3>
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <div className="flex items-center justify-between relative">
+                      {paymentStatusSteps.map((step, index) => {
+                        const StepIcon = step.icon;
+                        const currentIndex = paymentStatusSteps.findIndex(s => s.key === selectedOrder.paymentStatus);
+                        const isCompleted = index <= currentIndex;
+                        const isCurrent = index === currentIndex;
+                        
+                        return (
+                          <div key={step.key} className="flex flex-col items-center relative z-10 flex-1">
+                            <div
+                              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                                isCompleted
+                                  ? isCurrent
+                                    ? step.key === 'admin_confirmed' 
+                                      ? 'bg-green-500 text-white'
+                                      : 'bg-blue-500 text-white'
+                                    : 'bg-green-500 text-white'
+                                  : 'bg-muted-foreground/20 text-muted-foreground'
+                              }`}
+                            >
+                              <StepIcon className="w-5 h-5" />
+                            </div>
+                            <span className={`text-xs mt-2 text-center ${isCompleted ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                              {step.label}
+                            </span>
+                          </div>
+                        );
+                      })}
+                      {/* Progress line */}
+                      <div className="absolute top-5 left-[16.5%] right-[16.5%] h-0.5 bg-muted-foreground/20 -z-0">
+                        <div
+                          className="h-full bg-green-500 transition-all duration-500"
+                          style={{ 
+                            width: `${(paymentStatusSteps.findIndex(s => s.key === selectedOrder.paymentStatus) / (paymentStatusSteps.length - 1)) * 100}%` 
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Confirm Payment Button */}
+                    {selectedOrder.paymentStatus === 'customer_claimed' && (
+                      <div className="mt-6 pt-4 border-t border-border">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium">Customer has claimed payment</p>
+                            <p className="text-xs text-muted-foreground">Verify and confirm the payment to proceed</p>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setIsConfirmingPayment(true);
+                              // Simulate API call
+                              setTimeout(() => {
+                                setOrders(orders.map(o => 
+                                  o.id === selectedOrder.id 
+                                    ? { ...o, paymentStatus: 'admin_confirmed' as PaymentStatus }
+                                    : o
+                                ));
+                                setSelectedOrder({ ...selectedOrder, paymentStatus: 'admin_confirmed' });
+                                setIsConfirmingPayment(false);
+                                toast.success('Payment confirmed!');
+                              }, 1000);
+                            }}
+                            disabled={isConfirmingPayment}
+                            className="btn-tenant text-sm py-2 disabled:opacity-50 min-w-[140px]"
+                          >
+                            {isConfirmingPayment ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                                Confirming...
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle className="w-4 h-4 mr-1" />
+                                Confirm Payment
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
