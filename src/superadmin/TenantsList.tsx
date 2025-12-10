@@ -62,7 +62,7 @@ export default function TenantsList() {
           <p className="text-muted-foreground">Manage your brand tenants</p>
         </div>
         <Link
-          to="/superadmin/create"
+          to="/superadmin/create-tenant"
           className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -155,7 +155,7 @@ export default function TenantsList() {
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">No tenants found</p>
           <Link
-            to="/superadmin/create"
+            to="/superadmin/create-tenant"
             className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium"
           >
             Create your first tenant

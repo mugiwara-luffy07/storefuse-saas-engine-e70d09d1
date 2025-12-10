@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Main landing
+// Main landing (redirects to default tenant)
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -25,8 +25,10 @@ import AdminOrders from "./admin/AdminOrders";
 // Super Admin
 import SuperAdminLogin from "./superadmin/SuperAdminLogin";
 import SuperAdminLayout from "./superadmin/SuperAdminLayout";
+import SuperAdminDashboard from "./superadmin/DashboardHome";
 import TenantsList from "./superadmin/TenantsList";
 import CreateTenant from "./superadmin/CreateTenant";
+import { ProtectedRouteSuperadmin } from "./superadmin/ProtectedRouteSuperadmin";
 
 const queryClient = new QueryClient();
 
@@ -37,14 +39,17 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Main StoreFuse Landing */}
+          {/* Root redirects to default tenant */}
           <Route path="/" element={<Index />} />
 
-          {/* Super Admin Routes */}
-          <Route path="/superadmin" element={<SuperAdminLogin />} />
-          <Route path="/superadmin" element={<SuperAdminLayout />}>
-            <Route path="tenants" element={<TenantsList />} />
-            <Route path="create" element={<CreateTenant />} />
+          {/* Super Admin Routes (hidden, no public links) */}
+          <Route path="/superadmin/login" element={<SuperAdminLogin />} />
+          <Route element={<ProtectedRouteSuperadmin />}>
+            <Route path="/superadmin" element={<SuperAdminLayout />}>
+              <Route path="dashboard" element={<SuperAdminDashboard />} />
+              <Route path="tenants" element={<TenantsList />} />
+              <Route path="create-tenant" element={<CreateTenant />} />
+            </Route>
           </Route>
 
           {/* Tenant Admin Routes */}
@@ -54,7 +59,7 @@ const App = () => (
             <Route path="orders" element={<AdminOrders />} />
           </Route>
 
-          {/* Tenant Customer Routes */}
+          {/* Tenant Customer Routes (main public-facing) */}
           <Route path="/:tenant" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="order" element={<CustomOrder />} />

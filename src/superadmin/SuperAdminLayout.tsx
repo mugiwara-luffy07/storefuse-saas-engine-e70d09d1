@@ -1,28 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
-import { Building2, Plus, LogOut, Menu, X, Shield } from 'lucide-react';
+import { Building2, Plus, LogOut, Menu, X, Shield, LayoutDashboard } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
 const navItems = [
+  { icon: LayoutDashboard, label: 'Dashboard', path: 'dashboard' },
   { icon: Building2, label: 'Tenants', path: 'tenants' },
-  { icon: Plus, label: 'Create Tenant', path: 'create' },
+  { icon: Plus, label: 'Create Tenant', path: 'create-tenant' },
 ];
 
 export default function SuperAdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'superadmin') {
-      navigate('/superadmin');
-    }
-  }, [isAuthenticated, user, navigate]);
 
   const handleLogout = () => {
     logout();
-    navigate('/superadmin');
+    navigate('/superadmin/login');
   };
 
   const currentPath = location.pathname.split('/').pop();
@@ -52,7 +47,7 @@ export default function SuperAdminLayout() {
                   <Shield className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="font-semibold">StoreFuse</h1>
+                  <h1 className="font-semibold">Admin Portal</h1>
                   <p className="text-xs text-muted-foreground">Super Admin</p>
                 </div>
               </div>
