@@ -81,7 +81,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-current/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm opacity-60">
-            © {new Date().getFullYear()} {config.brandName}. Powered by StoreFuse.
+            © {new Date().getFullYear()} {config.brandName}. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             {config.social.instagram && (
