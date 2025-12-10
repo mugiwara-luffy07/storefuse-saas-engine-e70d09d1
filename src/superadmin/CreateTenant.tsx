@@ -70,7 +70,7 @@ export default function CreateTenant() {
       <div className="bg-card rounded-xl border border-border p-8">
         <h1 className="text-2xl font-semibold mb-2">Create New Tenant</h1>
         <p className="text-muted-foreground mb-8">
-          Set up a new brand tenant for the StoreFuse platform
+          Set up a new brand tenant for the platform
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
