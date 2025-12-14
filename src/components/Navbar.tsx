@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Scissors, Menu, X, User } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
-import { TenantLogo } from './TenantLogo';
 
 export function Navbar() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -17,7 +16,9 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to={`/${tenant}`} className="flex items-center gap-2">
-            <TenantLogo logo={config.logo} brandName={config.brandName} size="sm" />
+            <span className="text-xl md:text-2xl font-semibold tracking-tight">
+              {config.brandName}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

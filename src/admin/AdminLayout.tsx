@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useTenantStore } from '@/store/tenantStore';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { TenantLogo } from '@/components/TenantLogo';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: 'dashboard' },
@@ -61,9 +60,12 @@ export default function AdminLayout() {
         >
           <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="p-4 border-b border-border">
+            <div className="p-6 border-b border-border">
               <div className="flex items-center justify-between">
-                <TenantLogo logo={config.logo} brandName={config.brandName} size="sm" />
+                <div>
+                  <h1 className="font-semibold">{config.brandName}</h1>
+                  <p className="text-xs text-muted-foreground">Admin Panel</p>
+                </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
                   className="lg:hidden p-2 hover:bg-muted rounded-md"
@@ -71,7 +73,6 @@ export default function AdminLayout() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Admin Panel</p>
             </div>
 
             {/* Navigation */}
