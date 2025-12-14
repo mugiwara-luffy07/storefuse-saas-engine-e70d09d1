@@ -4,6 +4,7 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
 import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
+import { TenantLogo } from '@/components/TenantLogo';
 
 export default function AdminLogin() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -50,7 +51,9 @@ export default function AdminLogin() {
 
         <div className="bg-card rounded-xl border border-border p-8 shadow-sm animate-fade-in">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold mb-2">{config.brandName}</h1>
+            <div className="flex justify-center mb-4">
+              <TenantLogo logo={config.logo} brandName={config.brandName} size="lg" />
+            </div>
             <p className="text-muted-foreground">Admin Portal</p>
           </div>
 

@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { Instagram, Twitter } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
+import { TenantLogo } from './TenantLogo';
 
 export function Footer() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -14,7 +15,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold mb-4">{config.brandName}</h3>
+            <div className="mb-4">
+              <TenantLogo logo={config.logo} brandName={config.brandName} size="md" />
+            </div>
             <p className="text-sm opacity-80 max-w-md leading-relaxed">
               {config.description}
             </p>
