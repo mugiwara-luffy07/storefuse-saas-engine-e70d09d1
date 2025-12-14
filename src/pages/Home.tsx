@@ -39,7 +39,7 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop)`,
+            backgroundImage: `url(https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=1920&h=1080&fit=crop&q=80)`,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
@@ -160,7 +160,7 @@ export default function Home() {
               },
               {
                 title: 'Patola Silk',
-                image: 'https://images.pexels.com/photos/7691218/pexels-photo-7691218.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop&q=80',
                 desc: 'Double ikat weaving',
               },
               {
@@ -170,7 +170,7 @@ export default function Home() {
               },
               {
                 title: 'Chanderi Silk',
-                image: 'https://images.pexels.com/photos/8285168/pexels-photo-8285168.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&h=800&fit=crop&q=80',
                 desc: 'Lightweight & sheer',
               },
               {
