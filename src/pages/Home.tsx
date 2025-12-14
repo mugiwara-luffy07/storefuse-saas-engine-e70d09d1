@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, Scissors, Ruler, Palette, Sparkles } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
+import mizukiLogo from '@/assets/mizuki-logo.png';
 
 export default function Home() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -38,12 +39,18 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1920&h=1080&fit=crop)`,
+            backgroundImage: `url(https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop)`,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
         
         <div className="relative z-10 container mx-auto px-4 text-center">
+          {/* Logo with dark background for visibility */}
+          <div className="inline-block mb-6 animate-slide-up">
+            <div className="bg-foreground/70 backdrop-blur-sm rounded-full p-4">
+              <img src={mizukiLogo} alt={config.brandName} className="w-20 h-20 md:w-28 md:h-28 object-contain" />
+            </div>
+          </div>
           <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4 animate-slide-up">
             {config.tagline}
           </p>
@@ -138,42 +145,42 @@ export default function Home() {
             {[
               {
                 title: 'Kanchipuram Silk',
-                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/8285167/pexels-photo-8285167.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Traditional temple border',
               },
               {
                 title: 'Banarasi Silk',
-                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/7420890/pexels-photo-7420890.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Intricate zari work',
               },
               {
                 title: 'Mysore Silk',
-                image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/8285483/pexels-photo-8285483.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Royal elegance',
               },
               {
                 title: 'Patola Silk',
-                image: 'https://images.unsplash.com/photo-1594463750939-ebb28c3f7f75?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/7691218/pexels-photo-7691218.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Double ikat weaving',
               },
               {
                 title: 'Tussar Silk',
-                image: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/8285481/pexels-photo-8285481.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Natural golden sheen',
               },
               {
                 title: 'Chanderi Silk',
-                image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&h=800&fit=crop',
+                image: 'https://images.pexels.com/photos/8285168/pexels-photo-8285168.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Lightweight & sheer',
               },
               {
                 title: 'Bhagalpuri Silk',
-                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop&sat=-30',
+                image: 'https://images.pexels.com/photos/7691186/pexels-photo-7691186.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Textured finish',
               },
               {
                 title: 'Paithani Silk',
-                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop&hue=40',
+                image: 'https://images.pexels.com/photos/8285482/pexels-photo-8285482.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop',
                 desc: 'Peacock motifs',
               },
             ].map((saree, index) => (
