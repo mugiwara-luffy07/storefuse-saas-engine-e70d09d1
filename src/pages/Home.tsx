@@ -123,44 +123,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Fabric Preview */}
+      {/* Saree Gallery */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2">
-                Our Fabric Collection
-              </h2>
-              <p className="text-muted-foreground">
-                Premium fabrics sourced for quality and comfort
-              </p>
-            </div>
-            <Link
-              to={`/${tenant}/order`}
-              className="hidden md:flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
-            >
-              View All
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+              Our Silk Saree Collection
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Discover the elegance of handcrafted silk sarees, each piece a masterpiece of traditional artistry
+            </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {config.fabricOptions.slice(0, 4).map((fabric, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              {
+                title: 'Kanchipuram Silk',
+                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop',
+                desc: 'Traditional temple border',
+              },
+              {
+                title: 'Banarasi Silk',
+                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop',
+                desc: 'Intricate zari work',
+              },
+              {
+                title: 'Mysore Silk',
+                image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&h=800&fit=crop',
+                desc: 'Royal elegance',
+              },
+              {
+                title: 'Patola Silk',
+                image: 'https://images.unsplash.com/photo-1594463750939-ebb28c3f7f75?w=600&h=800&fit=crop',
+                desc: 'Double ikat weaving',
+              },
+              {
+                title: 'Tussar Silk',
+                image: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&h=800&fit=crop',
+                desc: 'Natural golden sheen',
+              },
+              {
+                title: 'Chanderi Silk',
+                image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&h=800&fit=crop',
+                desc: 'Lightweight & sheer',
+              },
+              {
+                title: 'Bhagalpuri Silk',
+                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop&sat=-30',
+                desc: 'Textured finish',
+              },
+              {
+                title: 'Paithani Silk',
+                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop&hue=40',
+                desc: 'Peacock motifs',
+              },
+            ].map((saree, index) => (
               <div
-                key={fabric.id}
-                className="group relative aspect-square overflow-hidden rounded-xl bg-muted animate-slide-up cursor-pointer"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                key={saree.title}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-muted animate-slide-up cursor-pointer"
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+                <img
+                  src={saree.image}
+                  alt={saree.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
                 <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
-                  <h3 className="text-background font-semibold text-lg mb-1">
-                    {fabric.name}
+                  <h3 className="text-background font-semibold text-base md:text-lg mb-1">
+                    {saree.title}
                   </h3>
-                  <p className="text-background/80 text-sm">
-                    {fabric.colors.length} colors available
+                  <p className="text-background/80 text-xs md:text-sm">
+                    {saree.desc}
                   </p>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              to={`/${tenant}/order`}
+              className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all btn-tenant-outline"
+            >
+              Browse All Designs
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
