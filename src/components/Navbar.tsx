@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Scissors, Menu, X, User } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
-import mizukiLogo from '@/assets/mizuki-logo.png';
 
 export function Navbar() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -15,15 +14,8 @@ export function Navbar() {
     <nav className="nav-tenant sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo with dark background for visibility */}
-          <Link to={`/${tenant}`} className="flex items-center gap-3">
-            <div className="bg-foreground/70 rounded-full p-1.5">
-              <img 
-                src={mizukiLogo} 
-                alt={config.brandName} 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain"
-              />
-            </div>
+          {/* Logo */}
+          <Link to={`/${tenant}`} className="flex items-center gap-2">
             <span className="text-xl md:text-2xl font-semibold tracking-tight">
               {config.brandName}
             </span>

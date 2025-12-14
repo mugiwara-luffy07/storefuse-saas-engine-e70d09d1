@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, Scissors, Ruler, Palette, Sparkles } from 'lucide-react';
 import { useTenantStore } from '@/store/tenantStore';
-import mizukiLogo from '@/assets/mizuki-logo.png';
 
 export default function Home() {
   const { tenant } = useParams<{ tenant: string }>();
@@ -39,29 +38,19 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1583391733981-4c8b4a6d5a3e?w=1920&h=1080&fit=crop&q=80)`,
+            backgroundImage: `url(https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1920&h=1080&fit=crop)`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/70 via-foreground/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
         
         <div className="relative z-10 container mx-auto px-4 text-center">
-          {/* Logo with dark background for visibility */}
-          <div className="inline-block mb-6 animate-slide-up">
-            <div className="bg-foreground/60 backdrop-blur-sm rounded-full p-4">
-              <img 
-                src={mizukiLogo} 
-                alt={config.brandName} 
-                className="w-24 h-24 md:w-32 md:h-32 object-contain"
-              />
-            </div>
-          </div>
-          <p className="text-sm uppercase tracking-[0.3em] text-background/80 mb-4 animate-slide-up">
+          <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4 animate-slide-up">
             {config.tagline}
           </p>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold mb-6 animate-slide-up stagger-1 text-background">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold mb-6 animate-slide-up stagger-1">
             {config.brandName}
           </h1>
-          <p className="text-lg md:text-xl text-background/80 max-w-2xl mx-auto mb-8 animate-slide-up stagger-2">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 animate-slide-up stagger-2">
             {config.description}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up stagger-3">
@@ -70,7 +59,7 @@ export default function Home() {
               Start Custom Order
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
-            <Link to={`/${tenant}/about`} className="btn-tenant-outline bg-background/10 border-background/30 text-background hover:bg-background/20">
+            <Link to={`/${tenant}/about`} className="btn-tenant-outline">
               Learn More
             </Link>
           </div>
@@ -149,42 +138,42 @@ export default function Home() {
             {[
               {
                 title: 'Kanchipuram Silk',
-                image: 'https://images.pexels.com/photos/3707987/pexels-photo-3707987.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop',
                 desc: 'Traditional temple border',
               },
               {
                 title: 'Banarasi Silk',
-                image: 'https://images.pexels.com/photos/7691196/pexels-photo-7691196.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop',
                 desc: 'Intricate zari work',
               },
               {
                 title: 'Mysore Silk',
-                image: 'https://images.pexels.com/photos/8285483/pexels-photo-8285483.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&h=800&fit=crop',
                 desc: 'Royal elegance',
               },
               {
                 title: 'Patola Silk',
-                image: 'https://images.pexels.com/photos/10657579/pexels-photo-10657579.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1594463750939-ebb28c3f7f75?w=600&h=800&fit=crop',
                 desc: 'Double ikat weaving',
               },
               {
                 title: 'Tussar Silk',
-                image: 'https://images.pexels.com/photos/8285167/pexels-photo-8285167.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&h=800&fit=crop',
                 desc: 'Natural golden sheen',
               },
               {
                 title: 'Chanderi Silk',
-                image: 'https://images.pexels.com/photos/7691239/pexels-photo-7691239.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&h=800&fit=crop',
                 desc: 'Lightweight & sheer',
               },
               {
                 title: 'Bhagalpuri Silk',
-                image: 'https://images.pexels.com/photos/8285484/pexels-photo-8285484.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=800&fit=crop&sat=-30',
                 desc: 'Textured finish',
               },
               {
                 title: 'Paithani Silk',
-                image: 'https://images.pexels.com/photos/7691168/pexels-photo-7691168.jpeg?w=600&h=800&fit=crop',
+                image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&h=800&fit=crop&hue=40',
                 desc: 'Peacock motifs',
               },
             ].map((saree, index) => (
